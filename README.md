@@ -1,5 +1,6 @@
 # google-earth-grid
-a very basic Google Earth kml generator
+
+This ia a very basic [Google Earth](https://earth.google.com/) kml file generator
 
 Usage:
 
@@ -20,4 +21,19 @@ Example:
 
 ```
 ./makegrid.py input.csv output.kml
+```
+
+The expected input file uses a comma-separated CSV-format file with one line per single location,
+
+```
+Label,latitude,longitude
+```
+
+
+e.g.:
+
+```
+A,-11.7992189239,-50.666666
+B,-40.5555555555,-15.4333333038
+C,-60.7911111111,-25.4333333318
 ```
