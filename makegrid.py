@@ -50,12 +50,14 @@ for row in data:
 # add the first point as last to complete the polygon
 polygon_points.append(polygon_points[0])
 
+line = make_line(polygon_points) if args.linestring else ''
+
 out = f"""<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://earth.google.com/kml/2.2">
   <Document>
     <name>Experiment 2</name>
 {"".join(points)}
-{make_line(polygon_points)}
+{line}
   </Document>
 
 </kml>
