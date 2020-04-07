@@ -5,7 +5,7 @@ import sys, os.path, csv, argparse
 def make_point(name, c1, c2):
     return f"""
     <Placemark>
-      <Name>{name}</Name>
+      <name>{name}</name>
       <Icon><href>root://icons/palette-3.png</href><y>96</y><w>32</w><h>32</h></Icon>
       <Point><coordinates>{c1},{c2}</coordinates></Point>
     </Placemark>
@@ -16,7 +16,7 @@ def make_line(points):
     text = "\n".join([f"{x[0]},{x[1]},0" for x in points])
     return f"""
     <Placemark>
-      <Name>Line</Name>
+      <name>Line</name>
       <styleUrl>#archaeo</styleUrl>
       <LineString>
         <tessellate>1</tessellate>

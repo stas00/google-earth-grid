@@ -4,33 +4,33 @@
     <name>Experiment 2</name>
 
     <Placemark>
-      <Name>A</Name>
+      <name>A</name>
       <Icon><href>root://icons/palette-3.png</href><y>96</y><w>32</w><h>32</h></Icon>
-      <Point><coordinates>-11.7992189239,-50.666666</coordinates></Point>
+      <Point><coordinates>-62.26,-2.68</coordinates></Point>
     </Placemark>
 
     <Placemark>
-      <Name>B</Name>
+      <name>B</name>
       <Icon><href>root://icons/palette-3.png</href><y>96</y><w>32</w><h>32</h></Icon>
-      <Point><coordinates>-40.5555555555,-15.4333333038</coordinates></Point>
+      <Point><coordinates>-61.40,-12.07</coordinates></Point>
     </Placemark>
 
     <Placemark>
-      <Name>C</Name>
+      <name>C</name>
       <Icon><href>root://icons/palette-3.png</href><y>96</y><w>32</w><h>32</h></Icon>
-      <Point><coordinates>-60.7911111111,-25.4333333318</coordinates></Point>
+      <Point><coordinates>-48.74,-8.26</coordinates></Point>
     </Placemark>
 
 
     <Placemark>
-      <Name>Line</Name>
+      <name>Line</name>
       <styleUrl>#archaeo</styleUrl>
       <LineString>
         <tessellate>1</tessellate>
-        <coordinates>-11.7992189239,-50.666666,0
--40.5555555555,-15.4333333038,0
--60.7911111111,-25.4333333318,0
--11.7992189239,-50.666666,0</coordinates>
+        <coordinates>-62.26,-2.68,0
+-61.40,-12.07,0
+-48.74,-8.26,0
+-62.26,-2.68,0</coordinates>
       </LineString>
     </Placemark>
 

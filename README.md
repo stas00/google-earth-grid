@@ -26,7 +26,7 @@ Example:
 The expected input file uses a comma-separated CSV-format file with one line per single location,
 
 ```
-Label,latitude,longitude
+Site Name,Longitude,Latitude
 ```
 
 
