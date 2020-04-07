@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.2">
+  <Document>
+    <name>Experiment 2</name>
+
+    <Placemark>
+      <Name>A</Name>
+      <Icon><href>root://icons/palette-3.png</href><y>96</y><w>32</w><h>32</h></Icon>
+      <Point><coordinates>-11.7992189239,-50.666666</coordinates></Point>
+    </Placemark>
+
+    <Placemark>
+      <Name>B</Name>
+      <Icon><href>root://icons/palette-3.png</href><y>96</y><w>32</w><h>32</h></Icon>
+      <Point><coordinates>-40.5555555555,-15.4333333038</coordinates></Point>
+    </Placemark>
+
+    <Placemark>
+      <Name>C</Name>
+      <Icon><href>root://icons/palette-3.png</href><y>96</y><w>32</w><h>32</h></Icon>
+      <Point><coordinates>-60.7911111111,-25.4333333318</coordinates></Point>
+    </Placemark>
+
+
+    <Placemark>
+      <Name>Line</Name>
+      <styleUrl>#archaeo</styleUrl>
+      <LineString>
+        <tessellate>1</tessellate>
+        <coordinates>-11.7992189239,-50.666666,0
+-40.5555555555,-15.4333333038,0
+-60.7911111111,-25.4333333318,0
+-11.7992189239,-50.666666,0</coordinates>
+      </LineString>
+    </Placemark>
+
+  </Document>
+
+</kml>
