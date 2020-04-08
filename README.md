@@ -6,15 +6,16 @@ Usage:
 
 ```
 ./makegrid.py -h
-usage: makegrid.py [-h] [-l] input [output]
+usage: makegrid.py [-h] [-l] [-n NAME] input [output]
 
 positional arguments:
-  input             csv input file
-  output            kml output file (optional)
+  input                 csv input file
+  output                kml output file (optional)
 
 optional arguments:
-  -h, --help        show this help message and exit
-  -l, --linestring  Connect dots
+  -h, --help            show this help message and exit
+  -l, --linestring      connect dots
+  -n NAME, --name NAME  project name
 ```
 
 Example:
@@ -23,20 +24,22 @@ Example:
 ./makegrid.py input.csv
 ```
 
+Command line arguments:
 
+* The expected input file uses a comma-separated CSV-format file with one line per single location:
 
-The expected input file uses a comma-separated CSV-format file with one line per single location:
+   ```
+   Site Name,Longitude,Latitude
+   ```
 
-```
-Site Name,Longitude,Latitude
-```
+   For example:
 
-e.g.:
+   ```
+   A,-62.26,-2.68
+   B,-61.40,-12.07
+   C,-48.74,-8.26
+   ```
 
-```
-A,-11.7992189239,-50.666666
-B,-40.5555555555,-15.4333333038
-C,-60.7911111111,-25.4333333318
-```
+* Unless explicitly specified, the output filename is derived from the input filename, by replacing `.csv` with `.kml`, and adding `-l` to basename if `-l` option is used.
 
-Unless explicitly specified, the output filename is derived from the input filename, by replacing `.csv` with `.kml`, and adding `-l` to basename if `-l` option is used.
+* By default the output kml will use `My Grid` as the project name. You can override this with `-n "My name"` in the command line.
