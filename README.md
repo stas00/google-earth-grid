@@ -42,4 +42,6 @@ Command line arguments:
 
 * Unless explicitly specified, the output filename is derived from the input filename, by replacing `.csv` with `.kml`, and adding `-l` to basename if `-l` option is used.
 
+   Warning: if the output file already exists, it will get silently overwritten with the new output.
+
 * By default the output kml will use `My Grid` as the project name. You can override this with `-n "My name"` in the command line.
