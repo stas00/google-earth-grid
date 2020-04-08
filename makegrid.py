@@ -48,7 +48,7 @@ polygon = ''
 if args.linestring:
     # add the first point as last to complete the polygon
     polygon_points.append(polygon_points[0])
-    polygon = make_polygon(polygon_points) if args.linestring else ''
+    polygon = make_polygon(polygon_points)
 
 out = f"""<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://earth.google.com/kml/2.2">
