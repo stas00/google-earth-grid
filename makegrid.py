@@ -11,7 +11,7 @@ def make_point(name, c1, c2):
     </Placemark>
 """
 
-def make_line(points):
+def make_polygon(points):
     # add ",0" for altitude
     text = "\n".join([f"{x[0]},{x[1]},0" for x in points])
     return f"""
@@ -40,21 +40,22 @@ print(f'Read {len(data)} points.')
 points = []
 polygon_points = []
 for row in data:
-    points.append(make_point(*row))
-    polygon_points.append([row[1], row[2]])
     #print(f' {row[0]}: {row[1]} {row[2]}')
+    points.append(make_point(*row))
+    if args.linestring: polygon_points.append([row[1], row[2]])
 
-# add the first point as last to complete the polygon
-polygon_points.append(polygon_points[0])
-
-line = make_line(polygon_points) if args.linestring else ''
+polygon = ''
+if args.linestring:
+    # add the first point as last to complete the polygon
+    polygon_points.append(polygon_points[0])
+    polygon = make_polygon(polygon_points) if args.linestring else ''
 
 out = f"""<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://earth.google.com/kml/2.2">
   <Document>
     <name>Experiment 2</name>
 {"".join(points)}
-{line}
+{polygon}
   </Document>
 
 </kml>
