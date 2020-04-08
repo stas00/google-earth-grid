@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import sys, os.path, csv, argparse
+import sys, os.path, csv, argparse, re
 
 def make_point(name, c1, c2):
     return f"""
@@ -62,8 +62,7 @@ if args.output is not None:
     ofn = args.output
 else:
     postfix = '.kml'
-    if args.linestring:
-        postfix = "-l" + postfix
-    ofn = args.input.lower().replace('.csv', postfix)
+    if args.linestring: postfix = "-l" + postfix
+    ofn = re.sub('.csv', postfix, args.input, re.I)
 print(f"Generating {ofn} (Project: {args.name})")
 with open(ofn, "w") as f: f.write(out)
