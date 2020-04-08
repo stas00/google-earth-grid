@@ -63,7 +63,7 @@ if args.output is not None:
 else:
     postfix = '.kml'
     if args.linestring: postfix = "-l" + postfix
-    if args.input.endswith('csv'):
+    if args.input.lower().endswith('csv'):
         ofn = re.sub('.csv', postfix, args.input, re.I)
     else: ofn = args.input + postfix
 print(f"Generating {ofn} (Project: {args.name})")
