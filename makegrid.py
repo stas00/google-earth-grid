@@ -27,18 +27,15 @@ def make_line(points):
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-l', '--linestring', action="store_true", help="Connect dots")
-parser.add_argument('input',  help='csv input file')
-parser.add_argument('output', help='kml output file')
+parser.add_argument('input', help='csv input file')
+parser.add_argument('output', nargs='?', help='kml output file (optional)')
 args = parser.parse_args()
 
 data = []
 with open(args.input) as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
-    line_count = 0
-    for row in csv_reader:
-        data.append(row)
-        line_count += 1
-    print(f'Processed {line_count} lines.')
+    for row in csv_reader: data.append(row)
+print(f'Read {len(data)} points.')
 
 points = []
 polygon_points = []
@@ -63,5 +60,13 @@ out = f"""<?xml version="1.0" encoding="UTF-8"?>
 </kml>
 """
 
-print(f"Generating {args.output}")
-with open(args.output, "w") as f: f.write(out)
+# output
+if args.output is not None:
+    ofn = args.output
+else:
+    postfix = '.kml'
+    if args.linestring:
+        postfix = "-l" + postfix
+    ofn = args.input.lower().replace('.csv', postfix)
+print(f"Generating {ofn}")
+with open(ofn, "w") as f: f.write(out)
