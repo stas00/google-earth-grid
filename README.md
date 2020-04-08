@@ -26,7 +26,7 @@ Example:
 
 Command line arguments:
 
-* The expected input file uses a comma-separated CSV-format file with one line per single location:
+* The required input file is expected to be a comma-separated CSV file, where each record is a single location as follows (no header):
 
    ```
    Site Name,Longitude,Latitude
