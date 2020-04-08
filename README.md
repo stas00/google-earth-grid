@@ -39,4 +39,4 @@ B,-40.5555555555,-15.4333333038
 C,-60.7911111111,-25.4333333318
 ```
 
-Unless explicitly specified, the output file is derived from the input file, replacing `.csv` with `.kml`, and `-l` will be added to the filename if `-l` option is used.
+Unless explicitly specified, the output filename is derived from the input filename, by replacing `.csv` with `.kml`, and adding `-l` to basename if `-l` option is used.
