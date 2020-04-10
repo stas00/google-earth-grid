@@ -27,10 +27,14 @@ def make_polygon(points):
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-l', '--linestring',  action="store_true", help="connect dots")
-parser.add_argument('-n', '--name', default="My Grid", help="project name",)
+parser.add_argument('-n', '--name', help="project name",)
 parser.add_argument('input', help='csv input file')
 parser.add_argument('output', nargs='?', help='kml output file (optional)')
 args = parser.parse_args()
+
+# project name is derived from input filename unless overriden with -n
+if args.name is None:
+    args.name = re.sub(r'.\w+$', '', args.input, re.I)
 
 with open(args.input) as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')

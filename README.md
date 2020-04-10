@@ -44,4 +44,4 @@ Command line arguments:
 
    Warning: if the output file already exists, it will get silently overwritten with the new output.
 
-* By default the output kml will use `My Grid` as the project name. You can override this with `-n "My name"` in the command line.
+* By default the output kml will use the input filename (sans the extension) as the project name. You can override this with `-n "My name"` in the command line.
