@@ -1,6 +1,6 @@
 # google-earth-grid
 
-This ia a very basic [Google Earth](https://earth.google.com/) kml file generator
+This is a very basic [Google Earth](https://earth.google.com/) kml file generator
 
 Usage:
 
