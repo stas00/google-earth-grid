@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 
 ##================= PhiGrid Platonic Coordinate Generator =======================
 ##
@@ -38,7 +40,10 @@
 
 import math
 import sys
-output = open('GoogleEarth_coord_out.kml','w')
+
+import argparse
+
+
 coordinate=[]
 coordinatelatitude=[]
 coordinatelongitude=[]
@@ -297,22 +302,43 @@ thetaY=math.radians(45)
 thetaX=math.radians(54.735610317)
 cuboctahedron=rotateX(rotateY(cuboctahedron))
 
-
-# get the shape
-print('Shape: tetrahedron, octahedron, cuboctahedron, cube, icosahedron, dodecahedron, beckerhagens')
-shape = input('\nWhich Shape? ')
-
-#shape = "cube"
-shape = globals()[shape]
-
 def num_input(q):
     return float(input(q))
 
-# get lock coordinate
-lat1=num_input('Latitude of lock coordinate? ')
-lon1=num_input('Longitude of lock coordinate? ')
-lat2=num_input('Latitude of header coordinate? ')
-lon2=num_input('Longitude of header coordinate? ')
+def num(v):
+    return float(v)
+
+parser = argparse.ArgumentParser()
+parser.add_argument('output', nargs='?', help='kml output file (optional)')
+parser.add_argument('-c', '--config', help="shape,lat1,lon1,lat2,lon2")
+args = parser.parse_args()
+
+outfile = 'GoogleEarth_coord_out.kml'
+if args.output:
+    outfile = args.output
+output = open(outfile, 'w')
+
+if args.config:
+    shape,lat1,lon1,lat2,lon2 = args.config.split(",")
+    lat1=num(lat1)
+    lon1=num(lon1)
+    lat2=num(lat2)
+    lon2=num(lon2)
+else:
+    # get the shape
+    print('Shape: tetrahedron, octahedron, cuboctahedron, cube, icosahedron, dodecahedron, beckerhagens')
+    shape = input('\nWhich Shape? ')
+    
+    # get lock coordinate
+    lat1=num_input('Latitude of lock coordinate? ')
+    lon1=num_input('Longitude of lock coordinate? ')
+    lat2=num_input('Latitude of header coordinate? ')
+    lon2=num_input('Longitude of header coordinate? ')
+
+print(f"Params: lat1={lat1}, lon1={lon1}, lat2={lat2}, long2={lon2}")
+
+#shape = "cube"
+shape = globals()[shape]
 
 # set rotational angles
 thetaX=-bearing(lat1,lon1,lat2,lon2)
@@ -403,5 +429,5 @@ while x < len(count):
 output.write("""</Document>
 </kml>""")
 
-print("Done -> GoogleEarth_coord_out.kml")
+print(f"Generated {outfile}")
 output.close()
