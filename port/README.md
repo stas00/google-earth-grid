@@ -7,9 +7,16 @@ I did just the bare minimum to make the scripts work under python 3.
 Upon request added shortcuts that avoid prompts:
 
 ```
-python3 GoogleEarth_bearing.py bearing.kml -c "cube,1,2,3"
-python3 GoogleEarth_coord.py coord.kml -c "cube,1,2,3,4"
+python3 GoogleEarth_bearing.py -o bearing.kml -c "cube,1,2,3"
+python3 GoogleEarth_bearing.py -o bearing -c "cube,1,2,3"
+python3 GoogleEarth_bearing.py -c "cube,1,2,3"
 ```
+
+And for the 2nd script, with the same variations as above:
+```
+python3 GoogleEarth_coord.py -o coord.kml -c "cube,1,2,3,4"
+```
+
 See:
 
 ```

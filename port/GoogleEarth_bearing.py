@@ -280,13 +280,15 @@ def num(v):
     return float(v)
 
 parser = argparse.ArgumentParser()
-parser.add_argument('output', nargs='?', help='kml output file (optional)')
-parser.add_argument('-c', '--config', help="shape,lat1,lon1,bear1")
+parser.add_argument('-o', '--output', help='kml output file (optional)')
+parser.add_argument('-c', '--config', help="shape,lat1,lon1,bear1 (optional)")
 args = parser.parse_args()
 
 outfile = 'GoogleEarth_bearing_out.kml'
 if args.output:
     outfile = args.output
+    if not outfile.endswith(".kml"):
+        outfile += ".kml"
 output = open(outfile, 'w')
 
 if args.config:
