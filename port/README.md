@@ -17,6 +17,17 @@ And for the 2nd script, with the same variations as above:
 python3 GoogleEarth_coord.py -o coord.kml -c "cube,1,2,3,4"
 ```
 
+And then you can feed it csv files:
+
+```
+python3 GoogleEarth_coord.py -i input_coord_sample.csv
+python3 GoogleEarth_bearing.py -i input_bearing_sample.csv
+```
+see the sample files in the repo, the format is:
+
+* for `GoogleEarth_coord.py`: `shape,lat1,lon1,lat2,lon2,outfile`
+* for `GoogleEarth_bearing.py`: `shape,lat1,lon1,bear,outfile`
+
 See:
 
 ```
