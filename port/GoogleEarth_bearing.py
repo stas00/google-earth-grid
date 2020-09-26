@@ -295,10 +295,10 @@ def run(shape, lat1, lon1, bear, outfile):
     thetaZ=math.radians(lon1)
     thetaY=-math.radians(lat1)
 
-    output.write("""<?xml version="1.0" encoding="UTF-8"?>
+    output.write(f"""<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://earth.google.com/kml/2.0">
 <Document>
-	<name></name>""")
+	<name>{outfile}</name>""")
 
     # get coordinates in Google Earth code
 
@@ -352,8 +352,8 @@ def run(shape, lat1, lon1, bear, outfile):
 
                 output.write("""
 
-    <Placemark id="khPlacemark866">
-    <name>""")
+<Placemark id="khPlacemark866">
+<name>""")
                 output.write(str(x))
                 output.write(str(z))
                 output.write("""</name><styleUrl>#khStyle2481</styleUrl>
@@ -368,15 +368,13 @@ def run(shape, lat1, lon1, bear, outfile):
                 output.write(',')
                 output.write(str(d))
                 output.write("""
-    </coordinates></LineString></Placemark>""")
-
-
+</coordinates></LineString></Placemark>""")
 
             z=z+1
         z=x+2    
         x=x+1
 
-    output.write("""</Document>\n</kml>""")
+    output.write("""</Document>\n</kml>\n""")
 
     print(f"Generated {outfile}")
     output.close()
