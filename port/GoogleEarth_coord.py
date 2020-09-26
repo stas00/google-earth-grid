@@ -44,9 +44,9 @@ import argparse
 import csv
 import os
 
-from google_earth_utils import rotateX, rotateY, rotateZ, bearing, coordinates
+from google_earth_utils import rotateX, rotateY, rotateZ, bearing, coordinates, get_shape
 
-def run(shape, lat1, lon1, lat2, lon2, outfile):
+def run(shape_name, lat1, lon1, lat2, lon2, outfile):
     if not outfile.endswith(".kml"):
         outfile += ".kml"
     output = open(outfile, 'w')
@@ -58,83 +58,10 @@ def run(shape, lat1, lon1, lat2, lon2, outfile):
         
     print(f"lat1={lat1}, lon1={lon1}, lat2={lat2}, long2={lon2} => {outfile} ")
 
-
-    coordinate=[]
-    coordinatelatitude=[]
-    coordinatelongitude=[]
-    count=[]
-    countsize=0
-
-    # Golden Ratio
-
-    p=(1+math.sqrt(5))/2
-
-    # xyz coordinates of vertices of platonic shapes
-
-    dodecahedron=[[0,1/p,p],[0,-1/p,-p],[0,-1/p,p],[0,1/p,-p],
-                  [1/p,p,0],[-1/p,-p,0],[-1/p,p,0],[1/p,-p,0],
-                  [p,0,1/p],[-p,0,-1/p],[-p,0,1/p],[p,0,-1/p],
-                  [1,1,1],[-1,-1,-1],[-1,1,1],[-1,-1,1],
-                  [-1,1,-1],[1,-1,-1],[1,-1,1],[1,1,-1]]
-
-    icosahedron=[[0,1,p],[0,-1,-p],[0,-1,p],[0,1,-p],
-                 [1,p,0],[-1,-p,0],[-1,p,0],[1,-p,0],
-                 [p,0,1],[-p,0,-1],[-p,0,1],[p,0,-1]]
-
-    cube=[[1,1,1],[-1,-1,-1],[-1,1,1],[-1,-1,1],
-          [-1,1,-1],[1,-1,-1],[1,-1,1],[1,1,-1]]
-
-    tetrahedron=[[1,1,1],[-1,-1,1],[-1,1,-1],[1,-1,-1]]
-
-    octahedron=[[1,0,0],[-1,0,0],[0,1,0],[0,-1,0],[0,0,1],[0,0,-1]]
-
-
-    cuboctahedron=[[1,1,0],[-1,1,0],[-1,-1,0],[1,-1,0],
-                   [1,0,1],[-1,0,-1],[1,0,-1],[-1,0,1],
-                   [0,1,1],[0,-1,-1],[0,1,-1],[0,-1,1]]
-
-
-    beckerhagens=[[0,1/p,p],[0,-1/p,-p],[0,-1/p,p],[0,1/p,-p],
-                  [1/p,p,0],[-1/p,-p,0],[-1/p,p,0],[1/p,-p,0],
-                  [p,0,1/p],[-p,0,-1/p],[-p,0,1/p],[p,0,-1/p],
-                  [1,1,1],[-1,-1,-1],[-1,1,1],[-1,-1,1],
-                  [-1,1,-1],[1,-1,-1],[1,-1,1],[1,1,-1],
-                  [0,-p,1],[0,p,-1],[0,-p,-1],[0,p,1],
-                  [1,0,p],[-1,0,-p],[-1,0,p],[1,0,-p],
-                  [p,-1,0],[-p,1,0],[-p,-1,0],[p,1,0],
-                  [2,0,0],[-2,0,0],[0,2,0],[0,-2,0],[0,0,2],[0,0,-2],
-                  [p,1/p,1],[-p,-1/p,-1],[-p,-1/p,1],[-p,1/p,-1],
-                  [p,-1/p,-1],[p,-1/p,1],[p,1/p,-1],[-p,1/p,1],
-                  [1,p,1/p],[-1,-p,-1/p],[-1,-p,1/p],[-1,p,-1/p],
-                  [1,-p,-1/p],[1,-p,1/p],[1,p,-1/p],[-1,p,1/p],
-                  [1/p,1,p],[-1/p,-1,-p],[-1/p,-1,p],[-1/p,1,-p],
-                  [1/p,-1,-p],[1/p,-1,p],[1/p,1,-p],[-1/p,1,p]]
-
-    #shape = "cube"
-    shape = vars()[shape]
+    shape, smallest = get_shape(shape_name, "coord")
     
-    # default the vertex of a shape toward true north
-    thetaY=math.radians(20.9051574479)
-    thetaX=math.radians(180)
-    dodecahedron=rotateX(rotateY(dodecahedron, thetaY), thetaX)
-    beckerhagens=rotateX(rotateY(beckerhagens, thetaY), thetaX)
-
-    thetaY=math.radians(35.26439)
-    thetaZ=math.radians(-45)
-    thetaX=math.radians(180)
-    tetrahedron=rotateY(rotateZ(tetrahedron, thetaZ), thetaY)
-
-    cube=rotateX(rotateY(rotateZ(cube, thetaZ), thetaY), thetaX)
-
-    thetaY=math.radians(31.717474)
-    icosahedron=rotateX(rotateY(icosahedron, thetaY), thetaX)
-
-    thetaY=math.radians(45)
-    thetaX=math.radians(54.735610317)
-    cuboctahedron=rotateX(rotateY(cuboctahedron, thetaY), thetaX)
-
     # set rotational angles
-    thetaX=-bearing(lat1, lon1, lat2, lon2, thetaY)
+    thetaX=-bearing(lat1, lon1, lat2, lon2, math.radians(45))
     thetaZ=math.radians(lon1)
     thetaY=-math.radians(lat1)
 
@@ -143,8 +70,13 @@ def run(shape, lat1, lon1, lat2, lon2, outfile):
 <Document>
         <name>{outfile}</name>""")
 
+    coordinate=[]
+    coordinatelatitude=[]
+    coordinatelongitude=[]
+    count=[]
+    countsize=0
+    
     # get coordinates in Google Earth code
-
     coordinates(rotateZ(rotateY(rotateX(shape, thetaX), thetaY), thetaZ), count,
                 coordinatelongitude, coordinatelatitude, output)
 
@@ -161,29 +93,6 @@ def run(shape, lat1, lon1, lat2, lon2, outfile):
     d=0.0
     separation=0
 
-    if shape==cube:
-        smallest=71
-
-    if shape==tetrahedron:
-        smallest=110
-
-    if shape==octahedron:
-        smallest=91
-
-    if shape==cuboctahedron:
-        smallest=61
-
-    if shape==icosahedron:
-        smallest=64
-
-    if shape==dodecahedron:
-        smallest=43
-
-    if shape==beckerhagens:
-        smallest=91
-    # Make "91" smaller to reduce number of lines in becker-hagens grid.
-
-
     while x < len(count):
         while z < (len(count)):
 
@@ -191,7 +100,6 @@ def run(shape, lat1, lon1, lat2, lon2, outfile):
             b=coordinatelatitude[x]
             c=coordinatelongitude[z]
             d=coordinatelatitude[z]
-            print(a, b, c, d)
             separation=math.acos(math.sin(b*.01744)*math.sin(d*.01744)+math.cos(b*.01744)*math.cos(d*.01744)*math.cos(a*.01744-c*.01744))/.01744
             if separation < smallest:
 
@@ -246,14 +154,16 @@ if args.infile:
     with open(file) as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         line_count = 0
+        rec_count = 0
         for row in csv_reader:
-            if len(row) < 5:
-                print(f"skipping invalid line {line_count}")
-                continue
             line_count += 1
+            if len(row) < 5:
+                print(f"skipping invalid line {line_count+1}")
+                continue
+            rec_count +=1 
             shape, lat1, lon1, lat2, lon2, outfile = row
             run(shape, lat1, lon1, lat2, lon2, outfile)
-        print(f'Processed {line_count} lines.')    
+        print(f'Processed {line_count} lines, {rec_count} records.')    
 else:
     outfile = 'GoogleEarth_coord_out.kml'
     if args.output:

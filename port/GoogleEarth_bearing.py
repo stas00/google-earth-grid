@@ -43,240 +43,9 @@ import csv
 import os
 
 
-coordinate=[]
-coordinatelatitude=[]
-coordinatelongitude=[]
-count=[]
-countsize=0
+from google_earth_utils import rotateX, rotateY, rotateZ, bearing, coordinates, get_shape
 
-# Golden Ratio
-
-p=(1+math.sqrt(5))/2
-
-# xyz coordinates of vertices of platonic shapes
-
-dodecahedron=[[0,1/p,p],[0,-1/p,-p],[0,-1/p,p],[0,1/p,-p],
-              [1/p,p,0],[-1/p,-p,0],[-1/p,p,0],[1/p,-p,0],
-              [p,0,1/p],[-p,0,-1/p],[-p,0,1/p],[p,0,-1/p],
-              [1,1,1],[-1,-1,-1],[-1,1,1],[-1,-1,1],
-              [-1,1,-1],[1,-1,-1],[1,-1,1],[1,1,-1]]
-
-icosahedron=[[0,1,p],[0,-1,-p],[0,-1,p],[0,1,-p],
-             [1,p,0],[-1,-p,0],[-1,p,0],[1,-p,0],
-             [p,0,1],[-p,0,-1],[-p,0,1],[p,0,-1]]
-
-
-cube=[[1,1,1],[-1,-1,-1],[-1,1,1],[-1,-1,1],
-      [-1,1,-1],[1,-1,-1],[1,-1,1],[1,1,-1]]
-
-tetrahedron=[[1,1,1],[-1,-1,1],[-1,1,-1],[1,-1,-1]]
-
-
-octahedron=[[1,0,0],[-1,0,0],[0,1,0],[0,-1,0],[0,0,1],[0,0,-1]]
-
-
-cuboctahedron=[[1,1,0],[-1,1,0],[-1,-1,0],[1,-1,0],
-               [1,0,1],[-1,0,-1],[1,0,-1],[-1,0,1],
-               [0,1,1],[0,-1,-1],[0,1,-1],[0,-1,1]]
-
-
-beckerhagens=[
-              [2,0,0],[-2,0,0],[0,2,0],[0,-2,0],[0,0,2],[0,0,-2],
-
-              [0,1/p,p],[0,-1/p,-p],[0,-1/p,p],[0,1/p,-p],
-              [1/p,p,0],[-1/p,-p,0],[-1/p,p,0],[1/p,-p,0],
-              [p,0,1/p],[-p,0,-1/p],[-p,0,1/p],[p,0,-1/p],
-              [1,1,1],[-1,-1,-1],[-1,1,1],[-1,-1,1],
-              [-1,1,-1],[1,-1,-1],[1,-1,1],[1,1,-1],
-              [0,-p,1],[0,p,-1],[0,-p,-1],[0,p,1],
-              [1,0,p],[-1,0,-p],[-1,0,p],[1,0,-p],
-              [p,-1,0],[-p,1,0],[-p,-1,0],[p,1,0],
-              [p,1/p,1],[-p,-1/p,-1],[-p,-1/p,1],[-p,1/p,-1],
-              [p,-1/p,-1],[p,-1/p,1],[p,1/p,-1],[-p,1/p,1],
-              [1,p,1/p],[-1,-p,-1/p],[-1,-p,1/p],[-1,p,-1/p],
-              [1,-p,-1/p],[1,-p,1/p],[1,p,-1/p],[-1,p,1/p],
-              [1/p,1,p],[-1/p,-1,-p],[-1/p,-1,p],[-1/p,1,-p],
-              [1/p,-1,-p],[1/p,-1,p],[1/p,1,-p],[-1/p,1,p]]
-
-
-# rotate xyz coordinates ccw around north pole, z-axis
-
-def rotateZ(function):
-   
-    for i in range(len(function)):
-
-        x=function[i][0]
-        y=function[i][1]
-        z=function[i][2]
-
-        function[i][0]=x*math.cos(thetaZ)-y*math.sin(thetaZ)
-        function[i][1]=x*math.sin(thetaZ)+y*math.cos(thetaZ)
-        function[i][2]=z
-
-    return function
-
-
-# rotate xyz coordinates ccw around 0 N 0 E, x-axis
-
-def rotateX(function):
-
-    print(len(function))
-    for i in range(len(function)):
-
-        x=function[i][0]
-        y=function[i][1]
-        z=function[i][2]
-
-        function[i][0]=x
-        function[i][1]=y*math.cos(thetaX)-z*math.sin(thetaX)
-        function[i][2]=y*math.sin(thetaX)+z*math.cos(thetaX)
-
-    return function
-
-
-# rotate xyz coordinates ccw around 0 N 90 E, y-axis
-
-def rotateY(function):
-   
-    for i in range(len(function)):
-
-        x=function[i][0]
-        y=function[i][1]
-        z=function[i][2]
-
-        function[i][0]=x*math.cos(thetaY)+z*math.sin(thetaY)
-        function[i][1]=y
-        function[i][2]=-x*math.sin(thetaY)+z*math.cos(thetaY)
-
-    return function
-
-
-
-# generate latitude and longitude from xyz coordinates
-
-def coordinates(function, output):
-    
-    for i in range(len(function)):
-
-        x=function[i][0]
-        y=function[i][1]
-        z=function[i][2]
-        
-        theta=0
-        phi=0
-
-        if z < 0:
-            theta=math.pi+math.atan(math.sqrt(x*x+y*y)/z)
-        elif z == 0:
-            theta=math.pi/2
-        else:
-            theta=math.atan(math.sqrt(x*x+y*y)/z)
-        
-        if x < 0 and y != 0:
-            phi=math.pi+math.atan(y/x)
-        elif x == 0 and y > 0:
-            phi=math.pi/2
-        elif x == 0 and y < 0:
-            phi=math.pi*3/2
-        elif y == 0 and x > 0:
-            phi=0
-        elif y == 0 and x < 0:
-            phi=math.pi
-        elif x > 0 and y <= 0:
-            phi = 2*math.pi + math.atan(y/x)
-        elif x == 0 and y == 0:
-            phi = 888
-        else:
-            phi=math.atan(y/x)
-
-        function[i][0]=theta
-        function[i][1]=phi
-        del function[i][2]
-
-        theta=math.degrees(theta)
-        phi=math.degrees(phi)
-
-        latitude=90-theta
-        if phi<=180:
-            longitude=phi
-        else:
-            longitude=phi-360
-
-        if longitude > 600:
-            longitude = 0.0
-
-
-        if longitude <=0:
-            one=str(len(count))
-            coordinatelongitude.append(longitude)
-            output.write("""
-            
-<Placemark><name>""")
-            output.write(one)
-            output.write("""</name><Icon>
-<href>root://icons/palette-3.png</href>
-<y>96</y><w>32</w><h>32</h></Icon>
-<Point><coordinates>  
-            """),
-            output.write(str(longitude))
-            output.write(',')
-        
-           
-        else:
-            one=str(len(count))
-            
-            coordinatelongitude.append(longitude)
-            output.write("""
-            
-<Placemark><name>""")
-            output.write(one)             
-            output.write("""</name><Icon>
-<href>root://icons/palette-3.png</href>
-<y>96</y><w>32</w><h>32</h></Icon>
-<Point><coordinates>  
-            """),
-            output.write(str(longitude))
-            output.write(',')
-      
-        if latitude <=0:
-            coordinatelatitude.append(latitude)
-            output.write(str(latitude))
-            output.write("""
-</coordinates></Point></Placemark>""")
-        else:
-            coordinatelatitude.append(latitude)
-            output.write(str(latitude))
-            output.write("""
-</coordinates></Point></Placemark>""")
-        
-       
-        count.append(1)
-        
-
-
-# default the vertex of a shape toward true north
-
-thetaY=math.radians(20.9051574479)
-thetaX=math.radians(180)
-dodecahedron=rotateX(rotateY(dodecahedron))
-beckerhagens=rotateX(rotateY(beckerhagens))
-
-
-thetaY=math.radians(35.2643897)
-thetaZ=math.radians(-45)
-thetaX=math.radians(180)
-tetrahedron=rotateY(rotateZ(tetrahedron))
-cube=rotateX(rotateY(rotateZ(cube)))
-
-thetaY=math.radians(31.717474)
-icosahedron=rotateX(rotateY(icosahedron))
-
-thetaY=math.radians(45)
-thetaX=math.radians(35.2643897)
-cuboctahedron=rotateX(rotateY(cuboctahedron))
-
-
-def run(shape, lat1, lon1, bear, outfile):
+def run(shape_name, lat1, lon1, bear, outfile):
     if not outfile.endswith(".kml"):
         outfile += ".kml"
     output = open(outfile, 'w')
@@ -284,11 +53,10 @@ def run(shape, lat1, lon1, bear, outfile):
     lat1=num(lat1)
     lon1=num(lon1)
     bear=num(bear)
-        
-    #shape = "cube"
-    shape = globals()[shape]
 
-    print(f"Params: lat1={lat1}, lon1={lon1}, bear={bear}")
+    print(f"lat1={lat1}, lon1={lon1}, bear={bear} => {outfile}")
+
+    shape, smallest = get_shape(shape_name, "bearing")
 
     # set rotational angles
     thetaX=-math.radians(bear)
@@ -299,11 +67,17 @@ def run(shape, lat1, lon1, bear, outfile):
 <kml xmlns="http://earth.google.com/kml/2.0">
 <Document>
 	<name>{outfile}</name>""")
-
+    
+    coordinate=[]
+    coordinatelatitude=[]
+    coordinatelongitude=[]
+    count=[]
+    countsize=0
+    
     # get coordinates in Google Earth code
-
-    coordinates(rotateZ(rotateY(rotateX(shape))), output)
-
+    coordinates(rotateZ(rotateY(rotateX(shape, thetaX), thetaY), thetaZ), count,
+                coordinatelongitude, coordinatelatitude, output)
+    
     # get lines between points in Google Earth code,
     # use alpha calculated from http://onlinemschool.com/math/library/vector/angl/
     # i.e.  use (1,1,0) and (1,0,1) as vectors if getting alpha for cuboctahedron
@@ -316,29 +90,6 @@ def run(shape, lat1, lon1, bear, outfile):
     c=0.0
     d=0.0
     separation=0
-
-    if shape==cube:
-        smallest=71
-
-    if shape==tetrahedron:
-        smallest=110
-
-    if shape==octahedron:
-        smallest=91
-
-    if shape==cuboctahedron:
-        smallest=61
-
-    if shape==icosahedron:
-        smallest=64
-
-    if shape==dodecahedron:
-        smallest=43
-
-
-    if shape==beckerhagens:
-        smallest=91
-    # Make "91" smaller to reduce number of lines in becker-hagens grid.
 
     while x < len(count):
         while z < (len(count)):
@@ -399,14 +150,16 @@ if args.infile:
     with open(file) as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         line_count = 0
+        rec_count = 0
         for row in csv_reader:
-            if len(row) < 4:
-                print(f"skipping invalid line {line_count}")
-                continue
             line_count += 1
+            if len(row) < 4:
+                print(f"skipping invalid line {line_count+1}")
+                continue
+            rec_count +=1 
             shape, lat1, lon1, bear, outfile = row
             run(shape, lat1, lon1, bear, outfile)
-        print(f'Processed {line_count} lines.')    
+        print(f'Processed {line_count} lines, {rec_count} records.')
 else:
     outfile = 'GoogleEarth_bearing_out.kml'
     if args.output:

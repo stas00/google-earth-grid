@@ -181,3 +181,91 @@ def coordinates(function, count, coordinatelongitude, coordinatelatitude, output
             output.write("""
 </coordinates></Point></Placemark>""")  
         count.append(1)
+
+
+def get_shape(name, caller):
+
+    # Golden Ratio
+
+    p=(1+math.sqrt(5))/2
+
+    # xyz coordinates of vertices of platonic shapes
+    shapes = dict(
+        dodecahedron=[[0,1/p,p],[0,-1/p,-p],[0,-1/p,p],[0,1/p,-p],
+                      [1/p,p,0],[-1/p,-p,0],[-1/p,p,0],[1/p,-p,0],
+                      [p,0,1/p],[-p,0,-1/p],[-p,0,1/p],[p,0,-1/p],
+                      [1,1,1],[-1,-1,-1],[-1,1,1],[-1,-1,1],
+                      [-1,1,-1],[1,-1,-1],[1,-1,1],[1,1,-1]],
+
+        icosahedron=[[0,1,p],[0,-1,-p],[0,-1,p],[0,1,-p],
+                     [1,p,0],[-1,-p,0],[-1,p,0],[1,-p,0],
+                     [p,0,1],[-p,0,-1],[-p,0,1],[p,0,-1]],
+
+        cube=[[1,1,1],[-1,-1,-1],[-1,1,1],[-1,-1,1],
+              [-1,1,-1],[1,-1,-1],[1,-1,1],[1,1,-1]],
+
+        tetrahedron=[[1,1,1],[-1,-1,1],[-1,1,-1],[1,-1,-1]],
+
+        octahedron=[[1,0,0],[-1,0,0],[0,1,0],[0,-1,0],[0,0,1],[0,0,-1]],
+
+
+        cuboctahedron=[[1,1,0],[-1,1,0],[-1,-1,0],[1,-1,0],
+                       [1,0,1],[-1,0,-1],[1,0,-1],[-1,0,1],
+                       [0,1,1],[0,-1,-1],[0,1,-1],[0,-1,1]],
+
+
+        beckerhagens=[[0,1/p,p],[0,-1/p,-p],[0,-1/p,p],[0,1/p,-p],
+                      [1/p,p,0],[-1/p,-p,0],[-1/p,p,0],[1/p,-p,0],
+                      [p,0,1/p],[-p,0,-1/p],[-p,0,1/p],[p,0,-1/p],
+                      [1,1,1],[-1,-1,-1],[-1,1,1],[-1,-1,1],
+                      [-1,1,-1],[1,-1,-1],[1,-1,1],[1,1,-1],
+                      [0,-p,1],[0,p,-1],[0,-p,-1],[0,p,1],
+                      [1,0,p],[-1,0,-p],[-1,0,p],[1,0,-p],
+                      [p,-1,0],[-p,1,0],[-p,-1,0],[p,1,0],
+                      [2,0,0],[-2,0,0],[0,2,0],[0,-2,0],[0,0,2],[0,0,-2],
+                      [p,1/p,1],[-p,-1/p,-1],[-p,-1/p,1],[-p,1/p,-1],
+                      [p,-1/p,-1],[p,-1/p,1],[p,1/p,-1],[-p,1/p,1],
+                      [1,p,1/p],[-1,-p,-1/p],[-1,-p,1/p],[-1,p,-1/p],
+                      [1,-p,-1/p],[1,-p,1/p],[1,p,-1/p],[-1,p,1/p],
+                      [1/p,1,p],[-1/p,-1,-p],[-1/p,-1,p],[-1/p,1,-p],
+                      [1/p,-1,-p],[1/p,-1,p],[1/p,1,-p],[-1/p,1,p]],
+        )
+
+    
+    # default the vertex of a shape toward true north
+    thetaY=math.radians(20.9051574479)
+    thetaX=math.radians(180)
+    shapes["dodecahedron"]=rotateX(rotateY(shapes["dodecahedron"], thetaY), thetaX)
+    shapes["beckerhagens"]=rotateX(rotateY(shapes["beckerhagens"], thetaY), thetaX)
+
+    thetaY=math.radians(35.26439)
+    thetaZ=math.radians(-45)
+    thetaX=math.radians(180)
+    shapes["tetrahedron"]=rotateY(rotateZ(shapes["tetrahedron"], thetaZ), thetaY)
+
+    shapes["cube"]=rotateX(rotateY(rotateZ(shapes["cube"], thetaZ), thetaY), thetaX)
+
+    thetaY=math.radians(31.717474)
+    shapes["icosahedron"]=rotateX(rotateY(shapes["icosahedron"], thetaY), thetaX)
+
+    thetaY=math.radians(45)
+    # XXX: refactoring note: not sure why these 2 values were different in 2 scripts
+    value=54.735610317 if caller == "coord" else 35.2643897
+    thetaX=math.radians(value)
+    shapes["cuboctahedron"]=rotateX(rotateY(shapes["cuboctahedron"], thetaY), thetaX)
+
+    smallest = dict(
+        cube=71,
+        tetrahedron=110,
+        octahedron=91,
+        cuboctahedron=61,
+        icosahedron=64,
+        dodecahedron=43,
+        beckerhagens=91, # Make "91" smaller to reduce number of lines in becker-hagens grid.
+    )
+    
+    if name not in shapes:
+        raise ValueError(f"don't know of {name}, only have {shapes.keys()}")
+    
+    return shapes[name], smallest[name]
+
