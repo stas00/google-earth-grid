@@ -1,3 +1,7 @@
-cube,1,2,3,4,cube-1-2-3-4
-tetrahedron,3,4,5,6,tetrahedron-3-4-5-6
-icosahedron,7,8,9,10,icosahedron-7-8-9-10
+cube,29.9792,31.13421,37.223224,38.922424,Giza-Gobekli_cube
+tetrahedron,29.9792,31.13421,37.223224,38.922424,Giza-Gobekli_Tetra
+icosahedron,29.9792,31.13421,37.223224,38.922424,Giza-Gobekli_Icos
+octahedron,29.9792,31.13421,37.223224,38.922424,Giza-Gobekli_Octa
+dodecahedron,29.9792,31.13421,37.223224,38.922424,Giza-Gobekli_Dodeca
+cuboctahedron,29.9792,31.13421,37.223224,38.922424,Giza-Gobekli_Cubocto
+beckerhagens,29.9792,31.13421,37.223224,38.922424,Giza-Gobekli_BeckerHagens
