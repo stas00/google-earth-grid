@@ -1,3 +1,7 @@
-cube,1,2,3,cube-1-2-3
-tetrahedron,3,4,5,tetrahedron-3-4-5
-icosahedron,7,8,9,icosahedron-7-8-9
+cube,29.9792,31.13421,110,Bearing_cube
+tetrahedron,29.9792,31.13421,110,Bearing_Tetra
+icosahedron,29.9792,31.13421,110,Bearing_Icos
+octahedron,29.9792,31.13421,110,Bearing_Octa
+dodecahedron,29.9792,31.13421,110,Bearing_Dodeca
+cuboctahedron,29.9792,31.13421,110,Bearing_Cubocto
+beckerhagens,29.9792,31.13421,110,Bearing_BeckerHagens
