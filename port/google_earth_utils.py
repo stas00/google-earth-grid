@@ -249,7 +249,7 @@ def get_shape(name, caller):
     shapes["icosahedron"]=rotateX(rotateY(shapes["icosahedron"], thetaY), thetaX)
 
     thetaY=math.radians(45)
-    # XXX: refactoring note: not sure why these 2 values were different in 2 scripts
+    # Tom: This difference is intentional due to the peculiarities of the geometry (squares and triangles).
     value=54.735610317 if caller == "coord" else 35.2643897
     thetaX=math.radians(value)
     shapes["cuboctahedron"]=rotateX(rotateY(shapes["cuboctahedron"], thetaY), thetaX)
